@@ -13,6 +13,13 @@ const form = document.getElementById("main");
 
 form.addEventListener("submit", async function(e) {
     e.preventDefault(); // Prevent form submission
+
+
+
+
+
+
+
     const textEl = document.getElementById("input").value; // Get the latest value
     try {
         const topic = await classifyText(textEl, topics); // Output: "shopping"
@@ -40,6 +47,7 @@ async function classifyText(text, topics) {
             }
         );
         const result = await response.json();
+        console.log(result);
         return result.labels[0]; // Return the most likely topic
     } catch (error) {
         console.error("Error classifying text:", error);
