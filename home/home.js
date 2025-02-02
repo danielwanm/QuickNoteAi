@@ -8,27 +8,33 @@ const appSettings = {
 const app = initializeApp(appSettings);
 const database = getDatabase(app);
 const notesRef = ref(database, `identity/${sessionStorage.getItem("key")}/notes`);
-const topics = ["shopping", "cooking", "health", "travel"];
+const topics = ref(database, `identity/${sessionStorage.getItem("key")}/topics`);
+const localtopics = ["shopping", "cooking", "health", "travel"];
+
+onValue(topics, function(snapshot){
+    let topicsRef = Object.values(snapshot.val())[0]
+    localtopics = topicsRef
+}
+)
+
 const form = document.getElementById("main");
 
 form.addEventListener("submit", async function(e) {
     e.preventDefault(); // Prevent form submission
-
-
-
-
-
-
-
     const textEl = document.getElementById("input").value; // Get the latest value
     try {
-        const topic = await classifyText(textEl, topics); // Output: "shopping"
+        const topic = await classifyText(textEl, localtopics); // Output: "shopping"
         console.log(topic)
         await push(notesRef, { "topic": topic, "text": textEl });
     } catch (error) {
         console.error("Error:", error);
     }
 });
+
+
+
+
+
 
 async function classifyText(text, topics) {
     try {
@@ -37,7 +43,7 @@ async function classifyText(text, topics) {
             {
                 method: "POST",
                 headers: {
-                    "Authorization": "Bearer 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", // Replace with your Hugging Face API key
+                    "Authorization": "Bearer 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", 
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
@@ -48,9 +54,42 @@ async function classifyText(text, topics) {
         );
         const result = await response.json();
         console.log(result);
+        if (result.scores[0]<0.5){
+        localtopics.append(generateTopic(textEl))
+        push(topics, localtopics)
+        classifyText(text, topics)
+        }
         return result.labels[0]; // Return the most likely topic
     } catch (error) {
         console.error("Error classifying text:", error);
         throw error;
     }
+}
+
+
+
+
+
+
+
+async function generateTopic(sentence) {
+    const response = await fetch(
+        "https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-1.3B", // Use a text generation model
+        {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer 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", // Replace with your Hugging Face API key
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                inputs: `Generate a 1-3 word topic based on this sentence: "${sentence}"`,
+                parameters: {
+                    max_length: 50, // Limit the length of the generated text
+                    num_return_sequences: 1 // Return only one topic
+                }
+            })
+        }
+    );
+    const result = await response.json();
+    return result[0]?.generated_text || "Error generating topic.";  
 }
