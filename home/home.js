@@ -30,7 +30,7 @@ async function classifyText(text, topics) {
             {
                 method: "POST",
                 headers: {
-                    "Authorization": "Bearer YOUR_API_KEY", // Replace with your Hugging Face API key
+                    "Authorization": "Bearer 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", // Replace with your Hugging Face API key
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
