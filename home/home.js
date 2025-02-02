@@ -13,7 +13,7 @@ const form = document.getElementById("main");
 
 form.addEventListener("submit", async function(e) {
     e.preventDefault(); // Prevent form submission
-    const textEl = document.getElementById("text").value; // Get the latest value
+    const textEl = document.getElementById("input").value; // Get the latest value
     try {
         const topic = await classifyText(textEl, topics); // Output: "shopping"
         console.log(topic)
