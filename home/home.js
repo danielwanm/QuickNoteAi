@@ -19,7 +19,7 @@ form.addEventListener("submit", function(e){
     e.preventDefault(); // Prevent form submission
     // call deepai api and set into a catagoy and then push to firebase
     let topic=  classifyText(textEl, topics) // Output: "shopping"
-    push(notes, {"topic": topic, "text": text})
+    push(notes, {"topic": topic, "text": textEl})
 })
 
 async function classifyText(text, topics) {
