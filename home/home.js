@@ -12,7 +12,7 @@ const appSettings = {
 const app = initializeApp(appSettings)
 const database = getDatabase(app)
 const notes = ref(database, `identity/${sessionStorage.getItem("key")}/notes`)
-let textEl = document.getElementById("text").value
+let textEl = document.getElementById("input").value
 const topics = ["shopping", "cooking", "health", "travel"];
 const form = document.getElementById("main")
 form.addEventListener("submit", function(e){
