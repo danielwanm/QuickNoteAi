@@ -93,7 +93,11 @@ async function generateTopic(sentence) {
             })
         }
     );
-    const result = await response.json();
-    let topic = result.split("**Topic:**")[1].trim(); // "Tutoring"
-    return topic
+    let result = await response.json();
+    console.log(result); // Check the API response
+    
+    let generatedText = result[0]?.generated_text || ""; // Extract text
+    let topic = generatedText.split("**Topic:**")[1]?.trim() || ""; // Extract topic safely
+    
+    return topic;
 }
