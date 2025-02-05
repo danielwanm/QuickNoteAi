@@ -55,7 +55,7 @@ async function classifyText(text, topics) {
         const result = await response.json();
         console.log(result);
         if (result.scores[0]<0.5){
-        localtopics.append(generateTopic(textEl))
+        localtopics.append(generateTopic(text))
         push(topics, localtopics)
         classifyText(text, topics)
         }
