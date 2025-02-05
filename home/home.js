@@ -74,14 +74,13 @@ async function classifyText(text, topics) {
 
 
 
-
 async function generateTopic(sentence) {
     const response = await fetch(
-        "https://api-inference.huggingface.co/models/google/gemma-2-2b-it", // Use a text generation model
+        "https://api-inference.huggingface.co/models/google/gemma-2-2b-it",
         {
             method: "POST",
             headers: {
-                "Authorization": "Bearer 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", // Replace with your Hugging Face API key
+                "Authorization": "Bearer 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",
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -93,11 +92,10 @@ async function generateTopic(sentence) {
             })
         }
     );
-    let result = await response.json();
-    console.log(result); // Check the API response
-    
-    let generatedText = result[0]?.generated_text || ""; // Extract text
-    let topic = generatedText.split("**Topic:**")[1]?.trim() || ""; // Extract topic safely
-    
-    return topic;
+
+    let result = await response.json(); // Ensure result is awaited
+    console.log(result); // Debugging: check the structure
+
+    // Directly use result since it's already the expected text
+    return result; 
 }
