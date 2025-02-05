@@ -75,7 +75,7 @@ async function classifyText(text, topics) {
 
 async function generateTopic(sentence) {
     const response = await fetch(
-        "https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-1.3B", // Use a text generation model
+        "https://api-inference.huggingface.co/models/google/gemma-2-2b-it", // Use a text generation model
         {
             method: "POST",
             headers: {
