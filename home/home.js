@@ -55,10 +55,12 @@ async function classifyText(text, topics) {
         const result = await response.json();
         console.log(result);
         if (result.scores[0]<0.5){
-        localtopics.push(generateTopic(text))
-        console.log(localtopics)
-       //push(topics, localtopics)
-        classifyText(text, topics)
+            let newtopic = generateTopic(text)
+            console.log(newtopic)
+            localtopics.push(newtopic)
+            console.log(localtopics)
+            //push(topics, localtopics)
+            classifyText(text, topics)
         }
         return result.labels[0]; // Return the most likely topic
     } catch (error) {
