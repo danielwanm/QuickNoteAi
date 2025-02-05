@@ -94,5 +94,6 @@ async function generateTopic(sentence) {
         }
     );
     const result = await response.json();
-    return result[0]?.generated_text || "Error generating topic.";  
+    let topic = result.split("**Topic:**")[1].trim(); // "Tutoring"
+    return topic
 }
