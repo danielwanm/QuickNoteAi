@@ -54,7 +54,7 @@ async function classifyText(text, topics) {
         );
         const result = await response.json();
         console.log(result);
-        if (result.scores[0]<0.5){
+        if (result.scores[0]<0.75){
             let newtopic = generateTopic(text)
             console.log(newtopic)
             localtopics.push(newtopic)
@@ -68,11 +68,6 @@ async function classifyText(text, topics) {
         throw error;
     }
 }
-
-
-
-
-
 
 async function generateTopic(sentence) {
     const response = await fetch(
@@ -96,6 +91,14 @@ async function generateTopic(sentence) {
     let result = await response.json(); // Ensure result is awaited
     console.log(result); // Debugging: check the structure
 
-    // Directly use result since it's already the expected text
-    return result; 
+    // Assuming response is in the format [{generated_text: "Topic"}]
+    let x = result[0]?.generated_text || "No topic generated"; 
+
+    return x; 
 }
+
+// Example usage:
+generateTopic("The economy is experiencing significant inflation.").then(topic => {
+    console.log("Generated Topic:", topic);
+});
+
