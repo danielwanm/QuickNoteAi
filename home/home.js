@@ -75,37 +75,40 @@ async function classifyText(text, topics) {
 
 
 async function generateTopic(sentence) {
-    const response = await fetch(
-        "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
-        {
-            method: "POST",
-            headers: {
-                "Authorization": "Bearer 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",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                inputs: `Generate a 1-3 word topic based on this sentence: "${sentence}"`,
-                parameters: {
-                    max_length: 50,
-                    num_return_sequences: 1
-                }
-            })
-        }
-    );
+    try {
+        const response = await fetch(
+            "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer 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",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    inputs: `Generate a 1-3 word topic based on this sentence: "${sentence}"`,
+                    parameters: {
+                        max_length: 50, // Adjust as needed
+                        num_return_sequences: 1
+                    }
+                })
+            }
+        );
 
-    if (!response.ok) {
-        // Log the full response if there's an error
-        const errorData = await response.json();
-        console.error("Error response:", errorData);
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error response:", errorData);
+            return "Error generating topic";
+        }
+
+        const result = await response.json();
+        console.log(result); // Log the response for debugging
+
+        // Extract the generated text from the response
+        const generatedText = result[0]?.summary_text || "No topic generated";
+        return generatedText.trim(); // Trim any extra whitespace
+    } catch (error) {
+        console.error("Fetch error:", error);
         return "Error generating topic";
     }
-
-    const result = await response.json();
-    console.log(result); // Log the response for debugging
-
-    let x = result[0]?.generated_text || "No topic generated"; 
-    return x; 
 }
-
-
 
