@@ -86,18 +86,26 @@ async function generateTopic(sentence) {
             body: JSON.stringify({
                 inputs: `Generate a 1-3 word topic based on this sentence: "${sentence}"`,
                 parameters: {
-                    max_length: 50, // Limit the length of the generated text
-                    num_return_sequences: 1 // Return only one topic
+                    max_length: 50,
+                    num_return_sequences: 1
                 }
             })
         }
     );
 
-    let result = await response.json(); // Ensure result is awaited
+    if (!response.ok) {
+        // Log the full response if there's an error
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        return "Error generating topic";
+    }
+
+    const result = await response.json();
     console.log(result); // Log the response for debugging
-    // Assuming response is in the format [{generated_text: "Topic"}]
+
     let x = result[0]?.generated_text || "No topic generated"; 
     return x; 
 }
+
 
 
